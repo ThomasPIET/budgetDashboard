@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                Int               @id @default(autoincrement())
+  email             String            @unique
+  password          String
+  name              String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  incomes           Income[]
+  expenses          Expense[]
+  expenseCategories ExpenseCategory[]
+  budgets           Budget[]
+  transactions      Transaction[]
+  settings          Setting?
+}
+
+model Income {
+  id        Int      @id @default(autoincrement())
+  name      String // Nom du revenu
+  amount    Float
+  month     Int
+  year      Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ExpenseCategory {
+  id       Int       @id @default(autoincrement())
+  name     String // Nom de la catégorie (Logement, Transport)
+  user     User      @relation(fields: [userId], references: [id])
+  userId   Int
+  expenses Expense[]
+}
+
+model Expense {
+  id          Int             @id @default(autoincrement())
+  description String
+  amount      Float
+  date        DateTime
+  category    ExpenseCategory @relation(fields: [categoryId], references: [id])
+  categoryId  Int
+  user        User            @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime        @default(now())
+}
+
+model Budget {
+  id            Int      @id @default(autoincrement())
+  month         Int
+  year          Int
+  totalIncome   Float
+  totalExpenses Float
+  totalSavings  Float
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Setting {
+  id            Int      @id @default(autoincrement())
+  startYear     Int
+  lateIncome    Boolean
+  lateIncomeDay Int? // Le jour où les revenus tardifs commencent à être comptabilisés
+  savingsRate   Float // Taux d'épargne (%) sur le revenu total
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int      @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  description String
+  amount      Float
+  date        DateTime
+  isIncome    Boolean
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
