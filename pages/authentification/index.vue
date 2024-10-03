@@ -1,3 +1,4 @@
+index.vue
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,7 +8,7 @@ import { useAuthStore } from '~/store/auth';
 
 const authStore = useAuthStore();
 const { authenticateUser } = authStore;
-const { authenticated } = storeToRefs(authStore);
+const { authenticated, loading } = storeToRefs(authStore);
 
 const user = ref({
   email: '',
@@ -21,9 +22,13 @@ const login = async () => {
   await authenticateUser(user.value);
   if (authenticated.value) {
     router.push('/');
+  } else {
+    // Handle login failure (e.g., show an error message)
+    console.error('Login failed');
   }
 };
 </script>
+
 
 <template>
   <div class="flex min-h-screen w-full flex-col lg:flex-row">
@@ -74,8 +79,9 @@ const login = async () => {
                 required
             />
           </div>
-          <Button type="submit" class="w-full">Login</Button>
-        </form>
+          <Button type="submit" class="w-full" :disabled="loading">
+            {{ loading ? 'Logging in...' : 'Login' }}
+          </Button>        </form>
         <div class="text-center text-sm">
           Don't have an account?
           <a href="#" class="underline underline-offset-4 hover:text-primary">
@@ -85,7 +91,7 @@ const login = async () => {
       </div>
     </div>
     <div class="hidden bg-muted lg:block lg:flex-1">
-      <!-- Placeholder for login image -->
+      <!-- login image -->
     </div>
   </div>
 </template>
