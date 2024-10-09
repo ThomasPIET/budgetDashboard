@@ -17,7 +17,7 @@ export async function checkUser({email, password}) {
         }
 
 
-        if (user.password === password) {
+        if (await verifyPassword(password, user.password)) {
             console.log('User found and password matches');
             return {
                 id: user.id,

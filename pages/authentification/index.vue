@@ -12,7 +12,6 @@ const { authenticated, loading } = storeToRefs(authStore);
 
 const user = ref({
   email: '',
-  name: '',
   password: ''
 })
 

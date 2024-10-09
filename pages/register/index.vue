@@ -1,33 +1,46 @@
-index.vue
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { storeToRefs } from 'pinia'
+import { ref } from 'vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useAuthStore } from '~/store/auth';
-
-const authStore = useAuthStore();
-const { authenticateUser } = authStore;
-const { authenticated, loading } = storeToRefs(authStore);
 
 const user = ref({
   email: '',
   name: '',
   password: ''
-})
+});
 
-const router = useRouter();
+const loading = ref(false);
+const error = ref<string | null>(null);
 
 const register = async () => {
-  await authenticateUser(user.value);
-  if (authenticated.value) {
-    router.push('/');
-  } else {
-    // Handle login failure (e.g., show an error message)
-    console.error('Login failed');
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const response = await globalThis.$fetch('/api/register', {
+      method: 'POST',
+      body: {
+        email: user.value.email,
+        name: user.value.name,
+        password: user.value.password,
+      },
+    });
+
+    if (response) {
+      //todo connecter l'utilisateur
+      console.log('User created:', response);
+    }
+  } catch (err) {
+    error.value = 'Error registering user';
+    console.error('Registration error:', err);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
+
 
 
 <template>
@@ -43,7 +56,7 @@ const register = async () => {
             Enter your info below to create your account
           </p>
         </div>
-        <form @submit.prevent="login" class="grid gap-4">
+        <form @submit.prevent="register" class="grid gap-4">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
             <Input
