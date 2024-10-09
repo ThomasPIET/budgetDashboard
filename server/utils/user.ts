@@ -16,15 +16,13 @@ export async function checkUser({email, password}) {
             return null;
         }
 
-        // In a real-world scenario, you should use a proper password hashing library like bcrypt
-        // This is just for demonstration purposes
+
         if (user.password === password) {
             console.log('User found and password matches');
             return {
                 id: user.id,
                 email: user.email,
                 name: user.name
-                // Don't include the password in the returned object
             };
         } else {
             console.log('Password does not match');
@@ -34,4 +32,13 @@ export async function checkUser({email, password}) {
         console.error('Error in checkUser:', error);
         throw error;
     }
+}
+
+
+export async function getUserById(userId) {
+    return prisma.user.findUnique({
+        where: {
+            id: userId,
+        }
+    });
 }

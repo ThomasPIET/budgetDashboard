@@ -1,6 +1,6 @@
 import {useAuthStore} from "~/store/auth";
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
     const { authenticated } = storeToRefs(useAuthStore());
     const token = useCookie('token');
 
@@ -8,12 +8,13 @@ export default defineNuxtRouteMiddleware((to, from) => {
         authenticated.value = true;
     }
 
+    const isProtectedRoute = !['authentification'].includes(to.name!);
+
     if (authenticated.value && to.name === 'authentification') {
         return navigateTo('/');
     }
 
-    if (!authenticated.value && to.name !== 'authentification') {
-        console.log('redirecting to authentification'); //debug
+    if (!authenticated.value && isProtectedRoute) {
         return navigateTo('/authentification');
     }
 });
