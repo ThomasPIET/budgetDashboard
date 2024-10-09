@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware((to) => {
         authenticated.value = true;
     }
 
-    const isProtectedRoute = !['authentification'].includes(to.name!);
+    const isProtectedRoute = !['authentification'].includes(to.name!) && !['register'].includes(to.name!);
 
     if (authenticated.value && to.name === 'authentification') {
         return navigateTo('/');

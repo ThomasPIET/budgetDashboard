@@ -18,11 +18,12 @@ const user = ref({
 
 const router = useRouter();
 
-const login = async () => {
+const register = async () => {
   await authenticateUser(user.value);
   if (authenticated.value) {
     router.push('/');
   } else {
+    // Handle login failure (e.g., show an error message)
     console.error('Login failed');
   }
 };
@@ -31,12 +32,15 @@ const login = async () => {
 
 <template>
   <div class="flex min-h-screen w-full flex-col lg:flex-row">
+    <div class="hidden bg-muted lg:block lg:flex-1">
+      <!-- register image -->
+    </div>
     <div class="flex flex-1 items-center justify-center p-6 sm:p-12">
       <div class="w-full max-w-[400px] space-y-6">
         <div class="space-y-2 text-center">
-          <h1 class="text-3xl font-bold">Login</h1>
+          <h1 class="text-3xl font-bold">Create your account</h1>
           <p class="text-balance text-sm text-muted-foreground">
-            Enter your email below to login to your account
+            Enter your info below to create your account
           </p>
         </div>
         <form @submit.prevent="login" class="grid gap-4">
@@ -51,14 +55,18 @@ const login = async () => {
             />
           </div>
           <div class="grid gap-2">
+            <Label for="name">Name</Label>
+            <Input
+                id="name"
+                v-model="user.name"
+                type="text"
+                placeholder="John Doe"
+                required
+            />
+          </div>
+          <div class="grid gap-2">
             <div class="flex items-center">
               <Label for="password">Password</Label>
-              <a
-                  href="/forgot-password"
-                  class="ml-auto inline-block text-sm underline"
-              >
-                Forgot your password?
-              </a>
             </div>
             <Input
                 id="password"
@@ -69,18 +77,15 @@ const login = async () => {
             />
           </div>
           <Button type="submit" class="w-full" :disabled="loading">
-            {{ loading ? 'Logging in...' : 'Login' }}
+            {{ loading ? 'Signing up...' : 'Sign up' }}
           </Button>        </form>
         <div class="text-center text-sm">
-          Don't have an account?
-          <a href="/register" class="underline underline-offset-4 hover:text-primary">
-            Sign up
+          Already have an account?
+          <a href="/authentification" class="underline underline-offset-4 hover:text-primary">
+            Sign in
           </a>
         </div>
       </div>
-    </div>
-    <div class="hidden bg-muted lg:block lg:flex-1">
-      <!-- login image -->
     </div>
   </div>
 </template>
