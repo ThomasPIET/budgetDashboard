@@ -3,7 +3,14 @@ import { ref } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {storeToRefs} from 'pinia';
 import { useAuthStore } from '~/store/auth';
+import {useRouter} from 'vue-router';
+
+const authStore = useAuthStore();
+const {authenticateUser} = authStore;
+const {authenticated, loading} = storeToRefs(authStore);
+const router = useRouter();
 
 const user = ref({
   email: '',
@@ -11,7 +18,6 @@ const user = ref({
   password: ''
 });
 
-const loading = ref(false);
 const error = ref<string | null>(null);
 
 const register = async () => {
@@ -28,19 +34,30 @@ const register = async () => {
       },
     });
 
-    if (response) {
-      //todo connecter l'utilisateur
-      console.log('User created:', response);
+    console.log('User created:', response);
+
+    await authenticateUser(user.value);
+
+    if (authenticated.value) {
+      router.push('/');
+    } else {
+      error.value = 'Authentication failed.';
+      console.error('Authentication failed.');
     }
-  } catch (err) {
-    error.value = 'Error registering user';
+  } catch (err: any) {
+    if (err && err.data && err.data.statusMessage) {
+      error.value = err.data.statusMessage;
+    } else if (err && err.message) {
+      error.value = err.message;
+    } else {
+      error.value = 'An unknown error occurred during registration.';
+    }
     console.error('Registration error:', err);
   } finally {
     loading.value = false;
   }
 };
 </script>
-
 
 
 <template>
@@ -91,14 +108,18 @@ const register = async () => {
           </div>
           <Button type="submit" class="w-full" :disabled="loading">
             {{ loading ? 'Signing up...' : 'Sign up' }}
-          </Button>        </form>
+          </Button>
+        </form>
         <div class="text-center text-sm">
           Already have an account?
           <a href="/authentification" class="underline underline-offset-4 hover:text-primary">
             Sign in
           </a>
         </div>
+        <!-- Display error message -->
+        <div v-if="error" class="text-red-500 text-center mt-4">{{ error }}</div>
       </div>
     </div>
   </div>
 </template>
+
