@@ -1,21 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {storeToRefs} from 'pinia';
-import { useAuthStore } from '~/store/auth';
-import {useRouter} from 'vue-router';
+import { ref } from "vue";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "~/store/auth";
+import { useRouter } from "vue-router";
+
+definePageMeta({
+  layout: "no-header",
+});
 
 const authStore = useAuthStore();
-const {authenticateUser} = authStore;
-const {authenticated, loading} = storeToRefs(authStore);
+const { authenticateUser } = authStore;
+const { authenticated, loading } = storeToRefs(authStore);
 const router = useRouter();
 
 const user = ref({
-  email: '',
-  name: '',
-  password: ''
+  email: "",
+  name: "",
+  password: "",
 });
 
 const error = ref<string | null>(null);
@@ -25,8 +29,8 @@ const register = async () => {
   error.value = null;
 
   try {
-    const response = await globalThis.$fetch('/api/register', {
-      method: 'POST',
+    const response = await globalThis.$fetch("/api/register", {
+      method: "POST",
       body: {
         email: user.value.email,
         name: user.value.name,
@@ -34,15 +38,15 @@ const register = async () => {
       },
     });
 
-    console.log('User created:', response);
+    console.log("User created:", response);
 
     await authenticateUser(user.value);
 
     if (authenticated.value) {
-      router.push('/');
+      router.push("/");
     } else {
-      error.value = 'Authentication failed.';
-      console.error('Authentication failed.');
+      error.value = "Authentication failed.";
+      console.error("Authentication failed.");
     }
   } catch (err: any) {
     if (err && err.data && err.data.statusMessage) {
@@ -50,15 +54,14 @@ const register = async () => {
     } else if (err && err.message) {
       error.value = err.message;
     } else {
-      error.value = 'An unknown error occurred during registration.';
+      error.value = "An unknown error occurred during registration.";
     }
-    console.error('Registration error:', err);
+    console.error("Registration error:", err);
   } finally {
     loading.value = false;
   }
 };
 </script>
-
 
 <template>
   <div class="flex min-h-screen w-full flex-col lg:flex-row">
@@ -77,21 +80,21 @@ const register = async () => {
           <div class="grid gap-2">
             <Label for="email">Email</Label>
             <Input
-                id="email"
-                v-model="user.email"
-                type="email"
-                placeholder="m@example.com"
-                required
+              id="email"
+              v-model="user.email"
+              type="email"
+              placeholder="m@example.com"
+              required
             />
           </div>
           <div class="grid gap-2">
             <Label for="name">Name</Label>
             <Input
-                id="name"
-                v-model="user.name"
-                type="text"
-                placeholder="John Doe"
-                required
+              id="name"
+              v-model="user.name"
+              type="text"
+              placeholder="John Doe"
+              required
             />
           </div>
           <div class="grid gap-2">
@@ -99,27 +102,31 @@ const register = async () => {
               <Label for="password">Password</Label>
             </div>
             <Input
-                id="password"
-                v-model="user.password"
-                type="password"
-                placeholder="********"
-                required
+              id="password"
+              v-model="user.password"
+              type="password"
+              placeholder="********"
+              required
             />
           </div>
           <Button type="submit" class="w-full" :disabled="loading">
-            {{ loading ? 'Signing up...' : 'Sign up' }}
+            {{ loading ? "Signing up..." : "Sign up" }}
           </Button>
         </form>
         <div class="text-center text-sm">
           Already have an account?
-          <a href="/authentification" class="underline underline-offset-4 hover:text-primary">
+          <a
+            href="/authentification"
+            class="underline underline-offset-4 hover:text-primary"
+          >
             Sign in
           </a>
         </div>
         <!-- Display error message -->
-        <div v-if="error" class="text-red-500 text-center mt-4">{{ error }}</div>
+        <div v-if="error" class="text-red-500 text-center mt-4">
+          {{ error }}
+        </div>
       </div>
     </div>
   </div>
 </template>
-
