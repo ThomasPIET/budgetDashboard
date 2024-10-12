@@ -1,18 +1,15 @@
 <script setup lang="ts">
-import { useAuth } from '~/composables/useAuth';
+import { useAuth } from "~/composables/useAuth";
 
 const { user, authenticated, loading, logout } = useAuth();
-console.log(user)
-
 </script>
-
 
 <template>
   <div v-if="authenticated">
     <p>Bienvenue, {{ user?.name }}</p>
     <p>Home</p>
     <a href="/settings"> go to settings</a>
-    <br>
+    <br />
 
     <button @click="logout">Déconnexion</button>
   </div>
@@ -22,7 +19,4 @@ console.log(user)
   </div>
 </template>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>
