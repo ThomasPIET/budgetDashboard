@@ -59,9 +59,9 @@ model Budget {
   id            Int      @id @default(autoincrement())
   month         Int
   year          Int
-  totalIncome   Float
-  totalExpenses Float
-  totalSavings  Float
+  totalIncome   Float    @default(0)
+  totalExpenses Float    @default(0)
+  totalSavings  Float    @default(0)
   user          User     @relation(fields: [userId], references: [id])
   userId        Int
   createdAt     DateTime @default(now())

@@ -10,8 +10,6 @@ const { user, authenticated, loading, logout } = useAuth();
     <p>Home</p>
     <a href="/settings"> go to settings</a>
     <br />
-
-    <button @click="logout">Déconnexion</button>
   </div>
   <div v-else>
     <p>Vous n'êtes pas connecté</p>
