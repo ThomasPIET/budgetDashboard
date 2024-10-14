@@ -73,7 +73,7 @@ model Setting {
   startYear     Int
   lateIncome    Boolean
   lateIncomeDay Int? // Le jour où les revenus tardifs commencent à être comptabilisés
-  savingsRate   Float // Taux d'épargne (%) sur le revenu total
+  savingsRate   Float    @default(0) // Taux d'épargne (%) sur le revenu total
   user          User     @relation(fields: [userId], references: [id])
   userId        Int      @unique
   createdAt     DateTime @default(now())
