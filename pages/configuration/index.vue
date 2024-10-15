@@ -10,8 +10,22 @@ const settingsData = ref({
 
 const saveSettings = async () => {
   console.log("Saving settings", settingsData.value);
-  //todo
-  // await saveSettings(settingsData.value);
+
+  try {
+    const res = await globalThis.$fetch("/api/configuration", {
+      method: "POST",
+      body: {
+        userId: user.value.id,
+        startYear: settingsData.value.startYear,
+        lateIncome: settingsData.value.lateIncome,
+        lateIncomeDay: settingsData.value.lateIncomeDay,
+      },
+    });
+
+    console.log("Configuration saved");
+  } catch (error) {
+    console.error(error);
+  }
 };
 </script>
 
