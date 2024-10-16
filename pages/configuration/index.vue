@@ -73,7 +73,6 @@ const saveSettings = async () => {
                 <HoverCardTrigger>
                   <svg
                     fill="#000000"
-                    version="1.1"
                     id="Capa_1"
                     width="15px"
                     height="15px"
@@ -111,7 +110,6 @@ const saveSettings = async () => {
               <HoverCardTrigger>
                 <svg
                   fill="#000000"
-                  version="1.1"
                   id="Capa_1"
                   width="15px"
                   height="15px"
