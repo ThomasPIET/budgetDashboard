@@ -31,7 +31,7 @@ const login = async () => {
     await authenticateUser(user.value);
 
     if (authenticated.value) {
-      router.push("/");
+      await router.push("/");
     } else {
       error.value = "Invalid email or password.";
       console.error("Login failed");

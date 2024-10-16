@@ -41,6 +41,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
           );
           return navigateTo("/configuration");
         }
+      } else if (settings && to.path === "/configuration") {
+        return navigateTo("/");
       }
     } catch (error) {
       console.error(
