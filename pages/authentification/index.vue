@@ -108,8 +108,6 @@ const login = async () => {
         </div>
       </div>
     </div>
-    <div class="hidden bg-muted lg:block lg:flex-1">
-      <!-- login image -->
-    </div>
+    <div class="hidden bg-muted lg:block lg:flex-1"></div>
   </div>
 </template>
