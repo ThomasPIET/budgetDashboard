@@ -173,6 +173,14 @@ const ajouterLigne = (categorie) => {
             </TableCell>
           </TableRow>
         </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell class="font-bold">Total</TableCell>
+            <TableCell v-for="mois in mois" :key="mois">
+              <!--      definir valeur-->
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
   </div>
