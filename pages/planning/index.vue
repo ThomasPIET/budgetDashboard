@@ -66,6 +66,7 @@ const ajouterLigne = (categorie) => {
           <TableRow>
             <TableHead class="w-[200px] font-bold">Revenus</TableHead>
             <TableHead v-for="mois in mois" :key="mois">{{ mois }}</TableHead>
+            <TableHead>Total</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -84,6 +85,18 @@ const ajouterLigne = (categorie) => {
                 type="number"
                 class="w-full bg-transparent"
               />
+            </TableCell>
+            <TableCell>
+              {{
+                Object.keys(revenu)
+                  .filter((key) =>
+                    mois
+                      .slice(0)
+                      .map((m) => m.toLowerCase())
+                      .includes(key),
+                  )
+                  .reduce((total, key) => total + Number(revenu[key]), 0)
+              }}
             </TableCell>
           </TableRow>
           <TableRow>
@@ -108,6 +121,23 @@ const ajouterLigne = (categorie) => {
                 )
               }}
             </TableCell>
+            <TableCell>
+              {{
+                revenus.reduce(
+                  (total, revenu) =>
+                    total +
+                    Object.keys(revenu)
+                      .filter((key) =>
+                        mois
+                          .slice(0)
+                          .map((m) => m.toLowerCase())
+                          .includes(key),
+                      )
+                      .reduce((total, key) => total + Number(revenu[key]), 0),
+                  0,
+                )
+              }}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
@@ -116,6 +146,7 @@ const ajouterLigne = (categorie) => {
           <TableRow>
             <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
             <TableHead v-for="mois in mois" :key="mois">{{ mois }}</TableHead>
+            <TableHead>Total</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -136,6 +167,18 @@ const ajouterLigne = (categorie) => {
                 type="number"
                 class="w-full bg-transparent"
               />
+            </TableCell>
+            <TableCell>
+              {{
+                Object.keys(depense)
+                  .filter((key) =>
+                    mois
+                      .slice(0)
+                      .map((m) => m.toLowerCase())
+                      .includes(key),
+                  )
+                  .reduce((total, key) => total + Number(depense[key]), 0)
+              }}
             </TableCell>
           </TableRow>
           <TableRow>
@@ -162,14 +205,32 @@ const ajouterLigne = (categorie) => {
                 )
               }}
             </TableCell>
+            <TableCell>
+              {{
+                depenses.reduce(
+                  (total, depense) =>
+                    total +
+                    Object.keys(depense)
+                      .filter((key) =>
+                        mois
+                          .slice(0)
+                          .map((m) => m.toLowerCase())
+                          .includes(key),
+                      )
+                      .reduce((total, key) => total + Number(depense[key]), 0),
+                  0,
+                )
+              }}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
+            <TableHead class="w-[200px] font-bold">Économies</TableHead>
             <TableHead v-for="mois in mois" :key="mois">{{ mois }}</TableHead>
+            <TableHead>Total</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -190,6 +251,18 @@ const ajouterLigne = (categorie) => {
                 type="number"
                 class="w-full bg-transparent"
               />
+            </TableCell>
+            <TableCell>
+              {{
+                Object.keys(economie)
+                  .filter((key) =>
+                    mois
+                      .slice(0)
+                      .map((m) => m.toLowerCase())
+                      .includes(key),
+                  )
+                  .reduce((total, key) => total + Number(economie[key]), 0)
+              }}
             </TableCell>
           </TableRow>
           <TableRow>
@@ -212,6 +285,23 @@ const ajouterLigne = (categorie) => {
                 economies.reduce(
                   (total, economie) =>
                     total + Number(economie[mois.toLowerCase()]),
+                  0,
+                )
+              }}
+            </TableCell>
+            <TableCell>
+              {{
+                economies.reduce(
+                  (total, economie) =>
+                    total +
+                    Object.keys(economie)
+                      .filter((key) =>
+                        mois
+                          .slice(0)
+                          .map((m) => m.toLowerCase())
+                          .includes(key),
+                      )
+                      .reduce((total, key) => total + Number(economie[key]), 0),
                   0,
                 )
               }}
