@@ -97,7 +97,21 @@ const ajouterLigne = (categorie) => {
             </TableCell>
           </TableRow>
         </TableBody>
-
+        <TableFooter>
+          <TableRow>
+            <TableCell class="font-bold">Total</TableCell>
+            <TableCell v-for="mois in mois" :key="mois">
+              {{
+                revenus.reduce(
+                  (total, revenu) => total + Number(revenu[mois.toLowerCase()]),
+                  0,
+                )
+              }}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
@@ -135,7 +149,23 @@ const ajouterLigne = (categorie) => {
             </TableCell>
           </TableRow>
         </TableBody>
-
+        <TableFooter>
+          <TableRow>
+            <TableCell class="font-bold">Total</TableCell>
+            <TableCell v-for="mois in mois" :key="mois">
+              <!--      Total expense-->
+              {{
+                depenses.reduce(
+                  (total, depense) =>
+                    total + Number(depense[mois.toLowerCase()]),
+                  0,
+                )
+              }}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
@@ -177,7 +207,14 @@ const ajouterLigne = (categorie) => {
           <TableRow>
             <TableCell class="font-bold">Total</TableCell>
             <TableCell v-for="mois in mois" :key="mois">
-              <!--      definir valeur-->
+              <!--      Total Saving-->
+              {{
+                economies.reduce(
+                  (total, economie) =>
+                    total + Number(economie[mois.toLowerCase()]),
+                  0,
+                )
+              }}
             </TableCell>
           </TableRow>
         </TableFooter>
