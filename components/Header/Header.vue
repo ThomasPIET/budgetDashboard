@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { LayoutDashboard, Calendar, CreditCard, Menu } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -82,8 +82,17 @@ const navItems = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" class="relative h-8 w-8 rounded-full">
               <Avatar class="h-8 w-8">
-                <AvatarImage src="#" alt="Avatar" />
-                <AvatarFallback>JD</AvatarFallback>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1.6em"
+                  height="1.6em"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
+                  />
+                </svg>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
