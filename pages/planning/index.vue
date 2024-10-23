@@ -109,6 +109,7 @@ const allocationsParMois = computed(() => {
             <TableCell
               v-for="allocation in allocationsParMois"
               :key="allocation.mois"
+              class="text-center"
             >
               {{ allocation.mois }}
             </TableCell>
@@ -116,7 +117,33 @@ const allocationsParMois = computed(() => {
         </TableHeader>
         <TableFooter>
           <TableRow>
-            <TableCell>À Allouer</TableCell>
+            <div
+              class="flex items-center h-12 px-4 text-left align-middle font-bold text-muted-foreground"
+            >
+              To be allocated
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ml-2"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+              >
+                <g fill="none">
+                  <path
+                    fill="currentColor"
+                    d="M4 11.25a.75.75 0 0 0 0 1.5zm0 1.5h16v-1.5H4z"
+                    opacity="0.5"
+                  />
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="m14 6l6 6l-6 6"
+                  />
+                </g>
+              </svg>
+            </div>
             <TableCell
               v-for="allocation in allocationsParMois"
               :key="allocation.mois"
@@ -124,6 +151,7 @@ const allocationsParMois = computed(() => {
                 'text-green-500': allocation.toBeAllocated === 0,
                 'text-red-500': allocation.toBeAllocated !== 0,
               }"
+              class="border border-amber-300 text-center"
             >
               {{ allocation.toBeAllocated }}
             </TableCell>
@@ -132,14 +160,21 @@ const allocationsParMois = computed(() => {
       </Table>
     </div>
 
-    <div class="border border-gray-200 rounded-lg p-2 m-10">
-      <div class="overflow-x-auto">
-        <Table>
-          <TableHeader>
+    <div class="border border-gray-200 rounded p-2 m-10">
+      <div class="overflow-x-auto rounded">
+        <Table class="rounded">
+          <TableHeader class="bg-pink-primary">
             <TableRow>
-              <TableHead class="w-[200px] font-bold">Revenus</TableHead>
-              <TableHead v-for="mois in mois" :key="mois">{{ mois }}</TableHead>
-              <TableHead>Total</TableHead>
+              <TableHead class="w-[200px] text-white font-bold"
+                >Revenus</TableHead
+              >
+              <TableHead
+                class="text-center text-white"
+                v-for="mois in mois"
+                :key="mois"
+                >{{ mois }}</TableHead
+              >
+              <TableHead class="text-white">Total</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -159,7 +194,7 @@ const allocationsParMois = computed(() => {
                 <Input
                   v-model="revenu[mois.toLowerCase()]"
                   type="number"
-                  class="w-full bg-transparent"
+                  class="w-full bg-transparent text-center"
                 />
               </TableCell>
               <TableCell>
@@ -189,7 +224,7 @@ const allocationsParMois = computed(() => {
           <TableFooter>
             <TableRow>
               <TableCell class="font-bold">Total</TableCell>
-              <TableCell v-for="mois in mois" :key="mois">
+              <TableCell v-for="mois in mois" :key="mois" class="text-center">
                 {{
                   revenus.reduce(
                     (total, revenu) =>
@@ -218,7 +253,7 @@ const allocationsParMois = computed(() => {
             </TableRow>
           </TableFooter>
         </Table>
-        <Table>
+        <Table class="mt-5">
           <TableHeader>
             <TableRow>
               <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
@@ -304,7 +339,7 @@ const allocationsParMois = computed(() => {
             </TableRow>
           </TableFooter>
         </Table>
-        <Table>
+        <Table class="mt-5 bg-amber-100 rounded">
           <TableHeader>
             <TableRow>
               <TableHead class="w-[200px] font-bold">Économies</TableHead>
