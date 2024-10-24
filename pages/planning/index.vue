@@ -96,7 +96,7 @@ const allocationsParMois = computed(() => {
 
 <template>
   <div v-if="authenticated" class="">
-    <div class="border-2 border-gray-300 rounded-lg p-2 m-10">
+    <div class="border-2 border-gray-200 rounded-lg p-2 m-10">
       <Table>
         <TableHeader>
           <TableRow>
@@ -151,7 +151,7 @@ const allocationsParMois = computed(() => {
                 'text-green-500': allocation.toBeAllocated === 0,
                 'text-red-500': allocation.toBeAllocated !== 0,
               }"
-              class="border border-amber-300 text-center"
+              class="text-center"
             >
               {{ allocation.toBeAllocated }}
             </TableCell>
@@ -160,21 +160,16 @@ const allocationsParMois = computed(() => {
       </Table>
     </div>
 
-    <div class="border border-gray-200 rounded p-2 m-10">
+    <div class="border-2 border-gray-200 rounded-lg p-2 m-10">
       <div class="overflow-x-auto rounded">
-        <Table class="rounded">
-          <TableHeader class="bg-pink-primary">
+        <Table class="rounded bg-green-100">
+          <TableHeader>
             <TableRow>
-              <TableHead class="w-[200px] text-white font-bold"
-                >Revenus</TableHead
-              >
-              <TableHead
-                class="text-center text-white"
-                v-for="mois in mois"
-                :key="mois"
-                >{{ mois }}</TableHead
-              >
-              <TableHead class="text-white">Total</TableHead>
+              <TableHead class="w-[200px] font-bold">Revenus</TableHead>
+              <TableHead class="text-center" v-for="mois in mois" :key="mois">{{
+                mois
+              }}</TableHead>
+              <TableHead>Total</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -253,7 +248,7 @@ const allocationsParMois = computed(() => {
             </TableRow>
           </TableFooter>
         </Table>
-        <Table class="mt-5">
+        <Table class="mt-5 bg-pink-200 rounded-lg">
           <TableHeader>
             <TableRow>
               <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
@@ -339,7 +334,7 @@ const allocationsParMois = computed(() => {
             </TableRow>
           </TableFooter>
         </Table>
-        <Table class="mt-5 bg-amber-100 rounded">
+        <Table class="mt-5 bg-blue-100 rounded">
           <TableHeader>
             <TableRow>
               <TableHead class="w-[200px] font-bold">Économies</TableHead>

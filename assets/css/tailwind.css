@@ -33,13 +33,6 @@
     --input:220 13% 91%;
     --ring:224 71.4% 4.1%;
     --radius: 0.5rem;
-
-    --green-primary: #26a86d;
-    --green-secondary: #d9f7e9;
-    --pink-primary: #fe1684;
-    --pink-secondary: #ffd0e7;
-    --blue-primary: #3285f3;
-    --blue-secondary: #d5e6fd;
   }
 
   .dark {
