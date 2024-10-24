@@ -95,7 +95,7 @@ const allocationsParMois = computed(() => {
 </script>
 
 <template>
-  <div v-if="authenticated" class="">
+  <div v-if="authenticated" class="m-5">
     <div class="border-2 border-gray-200 rounded-lg p-2 m-10">
       <Table>
         <TableHeader>
@@ -113,6 +113,7 @@ const allocationsParMois = computed(() => {
             >
               {{ allocation.mois }}
             </TableCell>
+            <TableCell> Total </TableCell>
           </TableRow>
         </TableHeader>
         <TableFooter>
@@ -154,6 +155,14 @@ const allocationsParMois = computed(() => {
               class="text-center"
             >
               {{ allocation.toBeAllocated }}
+            </TableCell>
+            <TableCell>
+              {{
+                allocationsParMois.reduce(
+                  (total, allocation) => total + allocation.toBeAllocated,
+                  0,
+                )
+              }}
             </TableCell>
           </TableRow>
         </TableFooter>
