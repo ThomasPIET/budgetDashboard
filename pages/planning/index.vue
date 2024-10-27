@@ -92,6 +92,13 @@ const allocationsParMois = computed(() => {
 
   return resultats;
 });
+
+const saveData = () => {
+  console.log("Save data");
+  console.log("Revenus", revenus.value);
+  console.log("Dépenses", depenses.value);
+  console.log("Économies", economies.value);
+};
 </script>
 
 <template>
@@ -100,7 +107,7 @@ const allocationsParMois = computed(() => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead class="text-2xl font-semibold text-center mb-4 pl-3">
+            <TableHead class="text-xl font-semibold mb-4 pl-3">
               Planning {{ annee }}
             </TableHead>
           </TableRow>
@@ -171,267 +178,290 @@ const allocationsParMois = computed(() => {
 
     <div class="border-2 border-gray-200 rounded-lg p-2 m-10">
       <div class="overflow-x-auto rounded">
-        <Table class="rounded bg-green-100">
-          <TableHeader>
-            <TableRow>
-              <TableHead class="w-[200px] font-bold">Revenus</TableHead>
-              <TableHead class="text-center" v-for="mois in mois" :key="mois">{{
-                mois
-              }}</TableHead>
-              <TableHead>Total</TableHead>
-            </TableRow>
-          </TableHeader>
+        <form @submit.prevent="saveData">
+          <Table class="rounded bg-green-100">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="w-[200px] font-bold">Revenus</TableHead>
+                <TableHead
+                  class="text-center"
+                  v-for="mois in mois"
+                  :key="mois"
+                  >{{ mois }}</TableHead
+                >
+                <TableHead>Total</TableHead>
+              </TableRow>
+            </TableHeader>
 
-          <TableBody>
-            <TableRow
-              v-for="(revenu, index) in revenus"
-              :key="`revenu-${index}`"
-            >
-              <TableCell>
-                <Input
-                  v-model="revenu.nom"
-                  placeholder="Nom du revenu"
-                  class="w-full bg-transparent"
-                />
-              </TableCell>
-              <TableCell v-for="mois in mois" :key="`revenu-${index}-${mois}`">
-                <Input
-                  v-model="revenu[mois.toLowerCase()]"
-                  type="number"
-                  class="w-full bg-transparent text-center"
-                />
-              </TableCell>
-              <TableCell>
-                {{
-                  Object.keys(revenu)
-                    .filter((key) =>
-                      mois
-                        .slice(0)
-                        .map((m) => m.toLowerCase())
-                        .includes(key),
-                    )
-                    .reduce((total, key) => total + Number(revenu[key]), 0)
-                }}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  @click="ajouterLigne('revenus')"
-                  >Ajouter un revenu
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell class="font-bold">Total</TableCell>
-              <TableCell v-for="mois in mois" :key="mois" class="text-center">
-                {{
-                  revenus.reduce(
-                    (total, revenu) =>
-                      total + Number(revenu[mois.toLowerCase()]),
-                    0,
-                  )
-                }}
-              </TableCell>
-              <TableCell>
-                {{
-                  revenus.reduce(
-                    (total, revenu) =>
-                      total +
-                      Object.keys(revenu)
-                        .filter((key) =>
-                          mois
-                            .slice(0)
-                            .map((m) => m.toLowerCase())
-                            .includes(key),
-                        )
-                        .reduce((total, key) => total + Number(revenu[key]), 0),
-                    0,
-                  )
-                }}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-        <Table class="mt-5 bg-pink-200 rounded-lg">
-          <TableHeader>
-            <TableRow>
-              <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
-              <TableHead v-for="mois in mois" :key="mois">{{ mois }}</TableHead>
-              <TableHead>Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
-              v-for="(depense, index) in depenses"
-              :key="`depense-${index}`"
-            >
-              <TableCell>
-                <Input
-                  v-model="depense.nom"
-                  placeholder="Nom de la dépense"
-                  class="w-full bg-transparent"
-                />
-              </TableCell>
-              <TableCell v-for="mois in mois" :key="`depense-${index}-${mois}`">
-                <Input
-                  v-model="depense[mois.toLowerCase()]"
-                  type="number"
-                  class="w-full bg-transparent"
-                />
-              </TableCell>
-              <TableCell>
-                {{
-                  Object.keys(depense)
-                    .filter((key) =>
-                      mois
-                        .slice(0)
-                        .map((m) => m.toLowerCase())
-                        .includes(key),
-                    )
-                    .reduce((total, key) => total + Number(depense[key]), 0)
-                }}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  @click="ajouterLigne('depenses')"
-                  >Ajouter une dépense
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell class="font-bold">Total</TableCell>
-              <TableCell v-for="mois in mois" :key="mois">
-                {{
-                  depenses.reduce(
-                    (total, depense) =>
-                      total + Number(depense[mois.toLowerCase()]),
-                    0,
-                  )
-                }}
-              </TableCell>
-              <TableCell>
-                {{
-                  depenses.reduce(
-                    (total, depense) =>
-                      total +
-                      Object.keys(depense)
-                        .filter((key) =>
-                          mois
-                            .slice(0)
-                            .map((m) => m.toLowerCase())
-                            .includes(key),
-                        )
-                        .reduce(
-                          (total, key) => total + Number(depense[key]),
-                          0,
-                        ),
-                    0,
-                  )
-                }}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-        <Table class="mt-5 bg-blue-100 rounded">
-          <TableHeader>
-            <TableRow>
-              <TableHead class="w-[200px] font-bold">Économies</TableHead>
-              <TableHead v-for="mois in mois" :key="mois">{{ mois }}</TableHead>
-              <TableHead>Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
-              v-for="(economie, index) in economies"
-              :key="`economie-${index}`"
-            >
-              <TableCell>
-                <Input
-                  v-model="economie.nom"
-                  placeholder="Nom de l'économie"
-                  class="w-full bg-transparent"
-                />
-              </TableCell>
-              <TableCell
-                v-for="mois in mois"
-                :key="`economie-${index}-${mois}`"
+            <TableBody>
+              <TableRow
+                v-for="(revenu, index) in revenus"
+                :key="`revenu-${index}`"
               >
-                <Input
-                  v-model="economie[mois.toLowerCase()]"
-                  type="number"
-                  class="w-full bg-transparent"
-                />
-              </TableCell>
-              <TableCell>
-                {{
-                  Object.keys(economie)
-                    .filter((key) =>
-                      mois
-                        .slice(0)
-                        .map((m) => m.toLowerCase())
-                        .includes(key),
+                <TableCell>
+                  <Input
+                    v-model="revenu.nom"
+                    placeholder="Nom du revenu"
+                    class="w-full bg-transparent"
+                  />
+                </TableCell>
+                <TableCell
+                  v-for="mois in mois"
+                  :key="`revenu-${index}-${mois}`"
+                >
+                  <Input
+                    v-model="revenu[mois.toLowerCase()]"
+                    type="number"
+                    class="w-full bg-transparent text-center"
+                  />
+                </TableCell>
+                <TableCell>
+                  {{
+                    Object.keys(revenu)
+                      .filter((key) =>
+                        mois
+                          .slice(0)
+                          .map((m) => m.toLowerCase())
+                          .includes(key),
+                      )
+                      .reduce((total, key) => total + Number(revenu[key]), 0)
+                  }}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    @click.prevent="ajouterLigne('revenus')"
+                    >Ajouter un revenu
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell class="font-bold">Total</TableCell>
+                <TableCell v-for="mois in mois" :key="mois" class="text-center">
+                  {{
+                    revenus.reduce(
+                      (total, revenu) =>
+                        total + Number(revenu[mois.toLowerCase()]),
+                      0,
                     )
-                    .reduce((total, key) => total + Number(economie[key]), 0)
-                }}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  @click="ajouterLigne('economies')"
-                  >Ajouter une économie
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell class="font-bold">Total</TableCell>
-              <TableCell v-for="mois in mois" :key="mois">
-                {{
-                  economies.reduce(
-                    (total, economie) =>
-                      total + Number(economie[mois.toLowerCase()]),
-                    0,
-                  )
-                }}
-              </TableCell>
-              <TableCell>
-                {{
-                  economies.reduce(
-                    (total, economie) =>
-                      total +
-                      Object.keys(economie)
-                        .filter((key) =>
-                          mois
-                            .slice(0)
-                            .map((m) => m.toLowerCase())
-                            .includes(key),
-                        )
-                        .reduce(
-                          (total, key) => total + Number(economie[key]),
-                          0,
-                        ),
-                    0,
-                  )
-                }}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+                  }}
+                </TableCell>
+                <TableCell>
+                  {{
+                    revenus.reduce(
+                      (total, revenu) =>
+                        total +
+                        Object.keys(revenu)
+                          .filter((key) =>
+                            mois
+                              .slice(0)
+                              .map((m) => m.toLowerCase())
+                              .includes(key),
+                          )
+                          .reduce(
+                            (total, key) => total + Number(revenu[key]),
+                            0,
+                          ),
+                      0,
+                    )
+                  }}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          <Table class="mt-5 bg-pink-200 rounded-lg">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="w-[200px] font-bold">Dépenses</TableHead>
+                <TableHead v-for="mois in mois" :key="mois">{{
+                  mois
+                }}</TableHead>
+                <TableHead>Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow
+                v-for="(depense, index) in depenses"
+                :key="`depense-${index}`"
+              >
+                <TableCell>
+                  <Input
+                    v-model="depense.nom"
+                    placeholder="Nom de la dépense"
+                    class="w-full bg-transparent"
+                  />
+                </TableCell>
+                <TableCell
+                  v-for="mois in mois"
+                  :key="`depense-${index}-${mois}`"
+                >
+                  <Input
+                    v-model="depense[mois.toLowerCase()]"
+                    type="number"
+                    class="w-full bg-transparent"
+                  />
+                </TableCell>
+                <TableCell>
+                  {{
+                    Object.keys(depense)
+                      .filter((key) =>
+                        mois
+                          .slice(0)
+                          .map((m) => m.toLowerCase())
+                          .includes(key),
+                      )
+                      .reduce((total, key) => total + Number(depense[key]), 0)
+                  }}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    @click.prevent="ajouterLigne('depenses')"
+                    >Ajouter une dépense
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell class="font-bold">Total</TableCell>
+                <TableCell v-for="mois in mois" :key="mois">
+                  {{
+                    depenses.reduce(
+                      (total, depense) =>
+                        total + Number(depense[mois.toLowerCase()]),
+                      0,
+                    )
+                  }}
+                </TableCell>
+                <TableCell>
+                  {{
+                    depenses.reduce(
+                      (total, depense) =>
+                        total +
+                        Object.keys(depense)
+                          .filter((key) =>
+                            mois
+                              .slice(0)
+                              .map((m) => m.toLowerCase())
+                              .includes(key),
+                          )
+                          .reduce(
+                            (total, key) => total + Number(depense[key]),
+                            0,
+                          ),
+                      0,
+                    )
+                  }}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          <Table class="mt-5 bg-blue-100 rounded">
+            <TableHeader>
+              <TableRow>
+                <TableHead class="w-[200px] font-bold">Économies</TableHead>
+                <TableHead v-for="mois in mois" :key="mois">{{
+                  mois
+                }}</TableHead>
+                <TableHead>Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow
+                v-for="(economie, index) in economies"
+                :key="`economie-${index}`"
+              >
+                <TableCell>
+                  <Input
+                    v-model="economie.nom"
+                    placeholder="Nom de l'économie"
+                    class="w-full bg-transparent"
+                  />
+                </TableCell>
+                <TableCell
+                  v-for="mois in mois"
+                  :key="`economie-${index}-${mois}`"
+                >
+                  <Input
+                    v-model="economie[mois.toLowerCase()]"
+                    type="number"
+                    class="w-full bg-transparent"
+                  />
+                </TableCell>
+                <TableCell>
+                  {{
+                    Object.keys(economie)
+                      .filter((key) =>
+                        mois
+                          .slice(0)
+                          .map((m) => m.toLowerCase())
+                          .includes(key),
+                      )
+                      .reduce((total, key) => total + Number(economie[key]), 0)
+                  }}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    @click.prevent="ajouterLigne('economies')"
+                    >Ajouter une économie
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell class="font-bold">Total</TableCell>
+                <TableCell v-for="mois in mois" :key="mois">
+                  {{
+                    economies.reduce(
+                      (total, economie) =>
+                        total + Number(economie[mois.toLowerCase()]),
+                      0,
+                    )
+                  }}
+                </TableCell>
+                <TableCell>
+                  {{
+                    economies.reduce(
+                      (total, economie) =>
+                        total +
+                        Object.keys(economie)
+                          .filter((key) =>
+                            mois
+                              .slice(0)
+                              .map((m) => m.toLowerCase())
+                              .includes(key),
+                          )
+                          .reduce(
+                            (total, key) => total + Number(economie[key]),
+                            0,
+                          ),
+                      0,
+                    )
+                  }}
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+          <div class="mt-5">
+            <Button variant="outline" type="submit" class="w-1/5">
+              Sauvegarder
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   </div>

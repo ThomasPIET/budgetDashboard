@@ -1,3 +1,4 @@
+<!--suppress HtmlUnknownTarget -->
 <script setup lang="ts">
 import { ref } from "vue";
 import { LayoutDashboard, Calendar, CreditCard, Menu } from "lucide-vue-next";
