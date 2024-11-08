@@ -1,17 +1,23 @@
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup>
+import { ref, computed, watch } from "vue";
 import { useAuth } from "~/composables/useAuth";
+import io from "socket.io-client";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
+const socket = io("http://localhost:3000", {
+  path: "/socket.io",
+  transports: ["websocket"],
+});
 const { user, authenticated } = useAuth();
 
 const annee = ref(new Date().getFullYear());
@@ -29,7 +35,6 @@ const mois = [
   "Novembre",
   "Décembre",
 ];
-
 const revenus = ref([]);
 const depenses = ref([]);
 const economies = ref([]);
@@ -55,6 +60,76 @@ const ajouterLigne = (categorie) => {
   else if (categorie === "depenses") depenses.value.push(nouvelleLigne);
   else if (categorie === "economies") economies.value.push(nouvelleLigne);
 };
+
+const debounce = (func, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), delay);
+  };
+};
+
+const sendData = debounce(() => {
+  const data = {
+    incomes: revenus.value.map((r) => ({
+      name: r.nom,
+      amount: Object.values(r).reduce(
+        (sum, val) => (typeof val === "number" ? sum + val : sum),
+        0,
+      ),
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
+      userId: user.value?.id,
+    })),
+    expenses: depenses.value.map((d) => ({
+      description: d.nom,
+      amount: Object.values(d).reduce(
+        (sum, val) => (typeof val === "number" ? sum + val : sum),
+        0,
+      ),
+      date: new Date(),
+      categoryId: null,
+      userId: user.value?.id,
+    })),
+    budget: {
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
+      totalIncome: revenus.value.reduce(
+        (sum, r) =>
+          sum +
+          Object.values(r).reduce(
+            (sum, val) => (typeof val === "number" ? sum + val : sum),
+            0,
+          ),
+        0,
+      ),
+      totalExpenses: depenses.value.reduce(
+        (sum, d) =>
+          sum +
+          Object.values(d).reduce(
+            (sum, val) => (typeof val === "number" ? sum + val : sum),
+            0,
+          ),
+        0,
+      ),
+      totalSavings: economies.value.reduce(
+        (sum, e) =>
+          sum +
+          Object.values(e).reduce(
+            (sum, val) => (typeof val === "number" ? sum + val : sum),
+            0,
+          ),
+        0,
+      ),
+      userId: user.value?.id,
+    },
+  };
+  socket.emit("saveData", data);
+  console.log("Data sent to server:", data);
+}, 1000); //debouncing de 1 seconde
+
+// Watchers pour surveiller les changements
+watch([revenus, depenses, economies], sendData, { deep: true });
 
 const allocationsParMois = computed(() => {
   const moisMinuscules = mois.map((m) => m.toLowerCase());
@@ -92,13 +167,6 @@ const allocationsParMois = computed(() => {
 
   return resultats;
 });
-
-const saveData = () => {
-  console.log("Save data");
-  console.log("Revenus", revenus.value);
-  console.log("Dépenses", depenses.value);
-  console.log("Économies", economies.value);
-};
 </script>
 
 <template>
